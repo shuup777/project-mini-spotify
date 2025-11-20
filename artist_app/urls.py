@@ -4,6 +4,7 @@ from . import views
 app_name = "artists"
 
 urlpatterns = [
+    path('', views.artist_dashboard, name="dashboard"),
     path("dashboard/", views.artist_dashboard, name="dashboard"),
     path("upload/", views.upload_song, name="upload-song"),
     path("song/<int:song_id>/edit/", views.edit_song, name="edit-song"),
