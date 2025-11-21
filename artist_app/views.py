@@ -2,7 +2,7 @@ from decimal import Decimal
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
-from django.http import JsonResponse, Http404
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 
@@ -18,12 +18,11 @@ def get_current_artist_or_404(user):
 
 
 @login_required
+
 def artist_dashboard(request):
-    """
-    Dashboard where artist sees:
-    - their songs with play_count / purchase_count
-    - quick links to upload/edit
-    """
+    return HttpResponse("Halaman Dashboard Artis OK")
+
+'''def artist_dashboard(request):
     artist = get_current_artist_or_404(request.user)
     songs = artist.songs.all().select_related("artist")
     # overall stats
@@ -41,7 +40,7 @@ def artist_dashboard(request):
         "total_income": total_income,
     }
     return render(request, "artists/dashboard.html", context)
-
+'''
 
 @login_required
 def upload_song(request):
