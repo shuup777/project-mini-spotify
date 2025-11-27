@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ page_title }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .plan-card {
+            border: 2px solid #ddd;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            max-width: 400px;
+        }
+        .price { font-size: 1.5em; color: #1DB954; font-weight: bold; }
+        .btn-subscribe {
+            background-color: #1DB954; /* Warna Spotify Green */
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Selamat Datang di Mini Spotify Premium!</h1>
+    <h2>Pilih Paket Langganan Anda</h2>
+    
+    {% for plan in plans %}
+        <div class="plan-card">
+            <h3>{{ plan.name }}</h3>
+            
+            <p class="price">Rp {{ plan.price }}</p>
+            
+            <p><strong>Durasi:</strong> {{ plan.duration_days }} Hari</p>
+            <p><strong>Batas Perangkat:</strong> {{ plan.max_devices }} Perangkat</p>
+            
+            <a href="{% url 'checkout' plan.id %}" class="btn-subscribe">
+                Langganan Sekarang
+            </a>
+        </div>
+    {% empty %}
+        <p>Maaf, saat ini belum ada paket langganan yang tersedia.</p>
+    {% endfor %}
+    
+</body>
+</html>
