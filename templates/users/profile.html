@@ -1,0 +1,19 @@
+<!-- user_app/templates/users/profile.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Profile</title>
+</head>
+<body>
+    <h2>Profil Anda</h2>
+    <p>Nama Tampilan: {{ user.profile.display_name }}</p>
+    <p>Bio: {{ user.profile.bio }}</p>
+    <p>Langganan: {{ user.subscription }}</p>
+    <p>Theme: {{ user.preferences.theme }}</p>
+    <p>Audio Quality: {{ user.preferences.audio_quality }}</p>
+    <p>Notifikasi Belum Dibaca: {{ unread_notifications }}</p>
+    <a href="{% url 'user_app:update_profile' %}">Edit Profil</a> |
+    <a href="{% url 'user_app:notifications' %}">Lihat Notifikasi</a> |
+    <a href="{% url 'user_app:logout' %}">Logout</a>
+</body>
+</html>
