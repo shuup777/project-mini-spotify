@@ -6,6 +6,9 @@ from django.http import JsonResponse
 from .services import UserAuthenticator, UserService
 from .models import Notification
 
+def home(request):
+    return render(request, 'home.html')
+
 def register_view(request):
     if request.method == 'POST':
         username = request.POST['username']
