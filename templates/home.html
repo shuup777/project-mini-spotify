@@ -1,7 +1,51 @@
-<h1>Welcome to Mini Spotify!</h1>
-<ul>
-    <li><a href="/user/">User</a></li>
-    <li><a href="/artist/">Artist</a></li>
-    <li><a href="/finance/">Finance</a></li>
-    <li><a href="/system/">System</a></li>
-</ul>
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h1 class="fw-bold">🎧 Mini Spotify</h1>
+        <p class="text-muted">Sistem streaming musik sederhana dengan 4 subsistem utama</p>
+    </div>
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-3">
+            <a href="/user" class="text-decoration-none">
+                <div class="card shadow-sm border-0 p-3 text-center">
+                    <h4>User</h4>
+                    <p class="text-muted m-0">Akses sebagai pendengar</p>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-3">
+            <a href="/artist" class="text-decoration-none">
+                <div class="card shadow-sm border-0 p-3 text-center">
+                    <h4>Artist</h4>
+                    <p class="text-muted m-0">Kelola lagu & statistik</p>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-3">
+            <a href="/finance" class="text-decoration-none">
+                <div class="card shadow-sm border-0 p-3 text-center">
+                    <h4>Finance</h4>
+                    <p class="text-muted m-0">Laporan keuangan</p>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-3">
+            <a href="/system" class="text-decoration-none">
+                <div class="card shadow-sm border-0 p-3 text-center">
+                    <h4>System</h4>
+                    <p class="text-muted m-0">Rekomendasi & statistik</p>
+                </div>
+            </a>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
