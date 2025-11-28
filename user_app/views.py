@@ -9,6 +9,9 @@ from .models import Notification
 def home(request):
     return render(request, 'home.html')
 
+def user_home(request):
+    return redirect('profile')
+
 def register_view(request):
     if request.method == 'POST':
         username = request.POST['username']
