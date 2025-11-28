@@ -2,9 +2,9 @@ from django.shortcuts import render
 from django.http import HttpResponse
 
 top_artists = [
-    ("Artist A", 120),
-    ("Artist B", 95),
-    ("Artist C", 80),
+    ("Pamungkas", 120),
+    ("Nadin Amizah", 95),
+    ("Tulus", 80),
 ]
 
 # Halaman dashboard /system/
@@ -20,13 +20,11 @@ def recommendations(request):
     username = request.GET.get('username')
     user_recommendations = []
 
-    # Contoh logika rekomendasi sederhana
     if username:
-        # Misal rekomendasi berdasarkan username (dummy)
         user_recommendations = [
-            ("Artist X", 5),
-            ("Artist Y", 3),
-            ("Artist Z", 2)
+            ("Rizky Febian", 5),
+            ("Isyana Sarasvati", 3),
+            ("Fiersa Besari", 2)
         ]
 
     context = {
