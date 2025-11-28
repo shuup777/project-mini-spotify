@@ -13,4 +13,5 @@ urlpatterns = [
     path('notifications/', views.notifications_view, name='notifications'),
     path('play/<int:song_id>/', views.play_song_view, name='play_song'),
     path('like/<int:song_id>/', views.like_song_view, name='like_song'),
+    path('', user_home, name='user_home'),
 ]
