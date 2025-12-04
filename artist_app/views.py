@@ -19,10 +19,10 @@ def get_current_artist_or_404(user):
 
 @login_required
 
-def artist_dashboard(request):
-    return HttpResponse("Halaman Dashboard Artis OK")
-
 '''def artist_dashboard(request):
+    return HttpResponse("Halaman Dashboard Artis OK")'''
+
+def artist_dashboard(request):
     artist = get_current_artist_or_404(request.user)
     songs = artist.songs.all().select_related("artist")
     # overall stats
@@ -40,7 +40,6 @@ def artist_dashboard(request):
         "total_income": total_income,
     }
     return render(request, "artists/dashboard.html", context)
-'''
 
 @login_required
 def upload_song(request):
