@@ -1,22 +1,44 @@
 <!DOCTYPE html>
-{% load static %}
+{% load static %} {# WAJIB: Pastikan ini ada di base.html Anda #}
 <html lang="en">
 <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <title>{% block title %}MiFY App{% endblock %}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    {# CSS dan Font Umum #}
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
+    
+    {# CSS Lokal (Gunakan {% static %}) #}
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+    
+    {# Block tambahan untuk CSS/Head spesifik #}
+    {% block extra_head %}{% endblock %} 
 </head>
-<body>
+<body id="page-top">
     
     <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
-        {# ... kode Navbar MiFY Anda ... #}
+        <div class="container px-4 px-lg-5">
+            <a class="navbar-brand" href="#page-top">MiFY</a>
+            {# ... sisa kode navbar ... #}
+        </div>
     </nav>
     
     {% block content %}
     {% endblock %}
 
-    <footer class="footer bg-black small text-center text-white-50">...</footer>
-    
+    <footer class="footer bg-black small text-center text-white-50"><div class="container px-4 px-lg-5">Copyright &copy; Your Website 2023</div></footer>
+
+    {# Javascript Global (Dipindahkan dari home.html ke sini) #}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    {# Javascript Lokal (Gunakan {% static %}) #}
+    <script src="{% static 'scripts.js' %}"></script>
+    <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+    
+    {# Block tambahan untuk JS spesifik #}
+    {% block extra_js %}{% endblock %}
+
 </body>
 </html>
