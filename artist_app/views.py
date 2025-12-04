@@ -19,9 +19,6 @@ def get_current_artist_or_404(user):
 
 @login_required
 
-'''def artist_dashboard(request):
-    return HttpResponse("Halaman Dashboard Artis OK")'''
-
 def artist_dashboard(request):
     artist = get_current_artist_or_404(request.user)
     songs = artist.songs.all().select_related("artist")
