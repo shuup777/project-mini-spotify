@@ -10,7 +10,7 @@ def home(request):
     return render(request, 'home.html')
 
 def user_home(request):
-    return redirect('profile')
+    return render(request, "users/login.html")
 
 def register_view(request):
     if request.method == 'POST':
