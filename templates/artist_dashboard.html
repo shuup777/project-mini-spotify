@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Artist dashboard — {{ artist.stage_name }}</h1>
+
+<p>Total plays: {{ total_plays }} | Total purchases: {{ total_purchases }} | Total income: ${{ total_income }}</p>
+
+<p>
+    <a href="{% url 'artists:upload-song' %}">Upload new song</a> |
+    <a href="{% url 'artists:sales-report' %}">View sales report</a>
+</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Price</th>
+            <th>Plays</th>
+            <th>Purchases</th>
+            <th>Uploaded</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for song in songs %}
+        <tr>
+            <td>{{ song.title }}</td>
+            <td>${{ song.price }}</td>
+            <td>{{ song.play_count }}</td>
+            <td>{{ song.purchase_count }}</td>
+            <td>{{ song.upload_date|date:"Y-m-d H:i" }}</td>
+            <td>
+                <a href="{% url 'artists:edit-song' song.id %}">Edit</a> |
+                <form method="post" action="{% url 'artists:delete-song' song.id %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" onclick="return confirm('Delete this song?')">Delete</button>
+                </form>
+            </td>
+        </tr>
+    {% empty %}
+        <tr><td colspan="6">No songs yet.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

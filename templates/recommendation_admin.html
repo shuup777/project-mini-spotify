@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Admin Sistem - Rekomendasi & Statistik</h2>
+
+    <div class="card mb-4">
+        <div class="card-header">Top Artis Paling Disukai</div>
+        <ul class="list-group list-group-flush">
+            {% for artist, count in top_artists %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{ artist }}
+                <span class="badge bg-primary rounded-pill">{{ count }} like</span>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="card">
+        <div class="card-header">Rekomendasi Berdasarkan User</div>
+        <form method="get" action="/admin/recommendations">
+            <div class="input-group p-3">
+                <input type="text" name="username" placeholder="Masukkan nama user" class="form-control">
+                <button type="submit" class="btn btn-success">Lihat Rekomendasi</button>
+            </div>
+        </form>
+
+        {% if recommendations %}
+        <ul class="list-group list-group-flush">
+            {% for artist, score in recommendations %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{ artist }}
+                <span class="badge bg-success rounded-pill">+{{ score }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

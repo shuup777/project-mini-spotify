@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>All Songs</h2>
+<ul>
+    {% for song in songs %}
+    <li>
+        <strong>{{ song.title }}</strong> — {{ song.artist.stage_name }}
+        <br/>Price: ${{ song.price }} | Plays: {{ song.play_count }} | Purchases: {{ song.purchase_count }}
+        <br/>
+        <a href="{% url 'artists:song-detail' song.id %}">Detail</a>
+    </li>
+    {% empty %}
+    <li>No songs available.</li>
+    {% endfor %}
+</ul>
+{% endblock %}
