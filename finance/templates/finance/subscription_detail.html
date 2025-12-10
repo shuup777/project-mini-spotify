@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <h2 class="mb-4 text-center" style="color: #1DB954;">{{ judul_halaman }}</h2>
+        <hr>
+
+        {% if subscription and subscription.is_active %}
+            
+            <div class="alert alert-success p-4 shadow-sm" role="alert">
+                <h4 class="alert-heading">✅ Langganan Aktif!</h4>
+                <p>Status langganan Anda saat ini adalah **Aktif**. Nikmati fitur premium Anda!</p>
+            </div>
+
+            <div class="card shadow-lg mt-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Informasi Paket</h5>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Paket Saat Ini
+                        <span class="fw-bold">{{ subscription.plan.get_name_display }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Harga Paket
+                        <span class="fw-bold">Rp{{ subscription.plan.price|floatformat:0 }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Mulai Sejak
+                        <span>{{ subscription.start_date|date:"d F Y H:i" }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Berakhir Pada
+                        <span class="fw-bold text-danger">{{ subscription.end_date|date:"d F Y H:i" }}</span>
+                    </li>
+                </ul>
+            </div>
+            
+        {% else %}
+            <div class="alert alert-warning p-4 shadow-sm" role="alert">
+                <h4 class="alert-heading">❌ Belum Berlangganan atau Kedaluwarsa</h4>
+                <p>Anda saat ini tidak memiliki langganan premium yang aktif. Langganan Anda mungkin sudah berakhir atau Anda belum pernah berlangganan.</p>
+                <hr>
+                <a href="{% url 'plan_list' %}" class="btn btn-custom-primary">
+                    Lihat Paket Langganan
+                </a>
+            </div>
+        {% endif %}
+        
+        <p class="mt-4 text-center"><a href="/" class="btn btn-outline-secondary">Kembali ke Beranda</a></p>
+    </div>
+</div>
+{% endblock content %}

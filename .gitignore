@@ -1,0 +1,17 @@
+# Database lokal
+db.sqlite3
+
+# Virtual Environment
+venv/
+env/
+
+# Python compiled files
+*.pyc
+__pycache__/
+
+# Log files
+*.log
+
+# Operating System files (macOS/Windows)
+.DS_Store
+Thumbs.db
