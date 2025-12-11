@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="mb-4 text-center" style="color: #1DB954;">Laporan Keuangan Aplikasi</h1>
+<hr>
+
+<div class="row mb-4">
+    <div class="col-md-6 col-lg-4">
+        <div class="card text-white bg-success mb-3 shadow">
+            <div class="card-body">
+                <h5 class="card-title">Total Pendapatan (SUCCESS)</h5>
+                <p class="card-text fs-3">Rp{{ total_pendapatan|floatformat:0 }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-4">
+        <div class="card text-white bg-info mb-3 shadow">
+            <div class="card-body">
+                <h5 class="card-title">Pelanggan Aktif</h5>
+                <p class="card-text fs-3">{{ pelanggan_aktif }} Pengguna</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-4">
+        <div class="card text-dark bg-light mb-3 shadow">
+            <div class="card-body">
+                <h5 class="card-title">Total Transaksi</h5>
+                <p class="card-text fs-3">{{ total_transaksi }} Transaksi</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h2 class="mt-5 mb-3">Daftar Transaksi</h2>
+
+<div class="card mb-4 shadow-sm">
+    <div class="card-body">
+        <h5 class="card-title">Filter Transaksi</h5>
+        <form method="get" class="row g-3 align-items-end">
+            <div class="col-md-4">
+                <label for="id_status" class="form-label">Status</label>
+                <select name="status" id="id_status" class="form-select">
+                    <option value="">Semua Status</option>
+                    {% for status_code, status_name in status_choices %}
+                        <option value="{{ status_code }}" {% if status_filter == status_code %}selected{% endif %}>
+                            {{ status_name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="id_min_amount" class="form-label">Min. Nominal (Rp)</label>
+                <input type="number" name="min_amount" id="id_min_amount" class="form-control" value="{{ min_amount|default:'' }}">
+            </div>
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-primary me-2">Terapkan Filter</button>
+                <a href="{% url 'finance:report' %}" class="btn btn-outline-secondary">Reset</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover shadow-sm">
+        <thead class="table-dark">
+            <tr>
+                <th>ID Transaksi</th>
+                <th>Pengguna</th>
+                <th>Paket</th>
+                <th>Nominal</th>
+                <th>Status</th>
+                <th>Tanggal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for trans in transaksi_halaman %}
+            <tr>
+                <td>{{ trans.id }}</td>
+                <td>{{ trans.user.username }}</td>
+                <td>{{ trans.plan.name }}</td> 
+                <td>Rp{{ trans.amount|floatformat:0 }}</td>
+                <td>
+                    {% if trans.status == 'SUCCESS' %}
+                        <span class="badge bg-success">Berhasil</span>
+                    {% elif trans.status == 'PENDING' %}
+                        <span class="badge bg-warning text-dark">Menunggu</span>
+                    {% else %}
+                        <span class="badge bg-danger">Gagal</span>
+                    {% endif %}
+                </td>
+                <td>{{ trans.transaction_date|date:"d M Y H:i" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" class="text-center">Tidak ada data transaksi.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<nav aria-label="Page navigation" class="mt-4">
+    <ul class="pagination justify-content-center">
+        {% if transaksi_halaman.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page=1&status={{ status_filter|default:'' }}&min_amount={{ min_amount|default:'' }}">Awal</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ transaksi_halaman.previous_page_number }}&status={{ status_filter|default:'' }}&min_amount={{ min_amount|default:'' }}">Sebelumnya</a></li>
+        {% endif %}
+
+        <li class="page-item active"><span class="page-link">Halaman {{ transaksi_halaman.number }} dari {{ transaksi_halaman.paginator.num_pages }}</span></li>
+
+        {% if transaksi_halaman.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ transaksi_halaman.next_page_number }}&status={{ status_filter|default:'' }}&min_amount={{ min_amount|default:'' }}">Berikutnya</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ transaksi_halaman.paginator.num_pages }}&status={{ status_filter|default:'' }}&min_amount={{ min_amount|default:'' }}">Akhir</a></li>
+        {% endif %}
+    </ul>
+</nav>
+
+{% endblock content %}

@@ -1,0 +1,51 @@
+{% extends "base.html" %} 
+{% load static %}
+
+{% block title %}Laporan Keuangan Admin{% endblock %} 
+
+{% block content %}
+    <div style="padding: 20px; background-color: #121212; color: white; min-height: 100vh;">
+        <h1 style="color: #1DB954;">💰 Laporan Keuangan Mini Spotify</h1>
+        <p style="color: #b3b3b3;">Data Perusahaan (Admin Keuangan). Diperbarui: {{ now|date:"d M Y H:i" }}</p>
+
+        <hr style="border-color: #333; margin: 20px 0;">
+
+        <h2>📈 Ringkasan Pendapatan</h2>
+        <div style="display: flex; gap: 40px; margin-bottom: 30px;">
+            <div style="background: #191414; padding: 20px; border-radius: 8px; border-left: 5px solid #1DB954;">
+                <p style="font-size: 1.2em; color: #b3b3b3;">Total Pendapatan Sukses</p>
+                <p style="font-size: 2.5em; font-weight: bold;">Rp{{ total_revenue|default:"0.00" }}</p>
+            </div>
+            <div style="background: #191414; padding: 20px; border-radius: 8px; border-left: 5px solid #B3B3B3;">
+                <p style="font-size: 1.2em; color: #b3b3b3;">Langganan Premium Aktif</p>
+                <p style="font-size: 2.5em; font-weight: bold;">{{ active_subscriptions }} User</p>
+            </div>
+        </div>
+        
+        <hr style="border-color: #333; margin: 20px 0;">
+
+        <h2>📜 10 Transaksi Sukses Terakhir</h2>
+        <table style="width: 100%; border-collapse: collapse; color: white; background-color: #191414;">
+            <thead>
+                <tr style="background-color: #282828; text-align: left;">
+                    <th style="padding: 15px;">User</th>
+                    <th style="padding: 15px;">Plan</th>
+                    <th style="padding: 15px;">Jumlah</th>
+                    <th style="padding: 15px;">Tanggal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for trans in recent_transactions %}
+                <tr style="border-bottom: 1px solid #444;">
+                    <td style="padding: 10px;">{{ trans.user.username }}</td>
+                    <td style="padding: 10px;">{{ trans.subscription_plan.name }}</td>
+                    <td style="padding: 10px;">Rp{{ trans.amount }}</td>
+                    <td style="padding: 10px;">{{ trans.transaction_date|date:"Y-m-d H:i" }}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="4" style="padding: 10px; text-align: center; color: #b3b3b3;">Belum ada transaksi sukses tercatat.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock content %}
