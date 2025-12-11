@@ -26,5 +26,5 @@ urlpatterns = [
     path('system/', include('system_admin_app.urls')),
     path('user/', include('user_app.urls')),
     path('artist/', include('artist_app.urls')),
-    path('finance/', include('finance_app.urls')),
+    path('finance/', include('finance.urls')),
 ]
