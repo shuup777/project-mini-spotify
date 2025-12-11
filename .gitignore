@@ -1,0 +1,17 @@
+# Mengabaikan Database Lokal
+db.sqlite3
+
+# Mengabaikan File Environment & Rahasia
+.env
+env/
+venv/
+.venv/
+
+# Mengabaikan File Cache Python (Sampah)
+__pycache__/
+*.pyc
+*.pyo
+
+# Mengabaikan Media User (Foto Profil)
+# Kita tidak ingin upload foto hasil tes kita ke github teman
+media/
