@@ -148,3 +148,5 @@ if not DEBUG:
         "https://*.railway.app",
         "https://*.up.railway.app",
     ]
+
+WHITENOISE_KEEP_ONLY_HASHED_FILES = False
