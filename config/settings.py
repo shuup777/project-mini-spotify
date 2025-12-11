@@ -1,5 +1,5 @@
 """
-Django settings for mini_spotify project.
+Django settings for django_project_PBO project.
 """
 
 from pathlib import Path
@@ -8,36 +8,35 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', 'default-key-hanya-untuk-local-dev-jika-DEBUG-True')
+SECRET_KEY = 'django-insecure-YOUR-ACTUAL-SECRET-KEY-HERE' # Ganti dengan kunci rahasia Anda
 
-# SECURITY WARNING: Ubah ke True agar error terlihat saat mengerjakan tugas
-DEBUG = True 
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '*'] # Mengizinkan koneksi lokal
+
 
 # Application definition
 
 INSTALLED_APPS = [
-    'whitenoise.runserver_nostatic',
-    'django.contrib.staticfiles',
+    # Django default apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    
-    # Apps Project
-    'recommendations',
-    'system_admin_app',
-    'user_app',      # Pastikan ini ada (App Kamu)
-    'artist_app',
-    'finance',       # Pastikan nama foldernya 'finance' atau 'finance_app' (sesuaikan)
+    'django.contrib.staticfiles',
+    'finance',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -46,13 +45,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'mini_spotify.urls'
+ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        # PENTING: Ini menghubungkan ke folder 'templates' di root project
-        'DIRS': [BASE_DIR / 'templates'], 
+        'DIRS': [BASE_DIR / 'templates'], # Folder templates global
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -65,9 +63,12 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'mini_spotify.wsgi.application'
+WSGI_APPLICATION = 'config.wsgi.application'
+
 
 # Database
+# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -75,7 +76,10 @@ DATABASES = {
     }
 }
 
+
 # Password validation
+# https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -91,35 +95,31 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
 # Internationalization
-LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+# https://docs.djangoproject.com/en/5.0/topics/i18n/
+
+LANGUAGE_CODE = 'id'
+
+TIME_ZONE = 'Asia/Jakarta' # Menggunakan huruf kapital untuk Jakarta
+
 USE_I18N = True
+
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / "staticfiles"
+
+# --- Static Files Configuration ---
+STATIC_URL = 'static/'
 STATICFILES_DIRS = [
-    BASE_DIR / "static",
-]
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
-# --- TAMBAHAN PENTING UNTUK USER PROFILE (UPLOAD FOTO) ---
-# Tanpa ini, fitur upload foto profil di class UserProfile tidak akan jalan
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
-
-# Default primary key field type
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-CSRF_TRUSTED_ORIGINS = [
-    "https://web-production-1b6bd.up.railway.app",
+    os.path.join(BASE_DIR, 'static'),
 ]
 
-# Logika keamanan tambahan dari branch Main (Penting untuk deployment)
-if not DEBUG:
-    CSRF_TRUSTED_ORIGINS += [
-        "https://*.railway.app",
-        "https://*.up.railway.app",
-    ]
+# --- Authentication Redirect Settings ---
+# URL yang digunakan untuk me-redirect setelah login berhasil (Mengatasi 404 /accounts/profile/)
+LOGIN_REDIRECT_URL = '/' 
+
+# URL untuk login (sudah benar)
+LOGIN_URL = '/login/' 
+
+# URL yang digunakan untuk me-redirect setelah logout (sudah benar)
+LOGOUT_REDIRECT_URL = '/login/'

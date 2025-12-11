@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Pilih Paket Langganan{% endblock %}
+
+{% block content %}
+<h1 class="text-center mb-5" style="color: #1DB954;">Pilih Paket Langganan Terbaik Anda</h1>
+
+<div class="row row-cols-1 row-cols-md-3 g-4 justify-content-center">
+    
+    {% for plan in object_list %}
+        <div class="col">
+            <div class="card h-100 shadow-lg text-center 
+                {% if plan.name == 'PRE' %}border-success border-3{% else %}border-secondary{% endif %}">
+                
+                <div class="card-header bg-dark text-white p-3">
+                    <h4 class="my-0 fw-normal">
+                        {{ plan.get_name_display|cut:"(Hanya 1 perangkat, Kualitas Standar)"|cut:"(Bebas iklan, Kualitas HD, 2 perangkat)"|cut:"(Bebas iklan, Kualitas HD, Hingga 6 perangkat)" }}
+                    </h4>
+                </div>
+                
+                <div class="card-body d-flex flex-column">
+                    <h1 class="card-title pricing-card-title mb-3">
+                        Rp{{ plan.price|floatformat:0 }}<small class="text-muted fw-light">/bln</small>
+                    </h1>
+                    
+                    <ul class="list-unstyled mt-3 mb-4 text-start mx-auto flex-grow-1" style="max-width: 200px;">
+                        
+                        {% if plan.name == 'BAS' %}
+                            <li>✅ Dengarkan Musik</li>
+                            <li>✅ 1 Perangkat</li>
+                            <li>❌ Bebas Iklan</li>
+                            <li>❌ Kualitas HD</li>
+                        {% elif plan.name == 'PRE' %}
+                            <li>✅ Dengarkan Musik</li>
+                            <li>✅ 2 Perangkat</li>
+                            <li>✅ Bebas Iklan</li>
+                            <li>✅ Kualitas HD</li>
+                        {% elif plan.name == 'FAM' %}
+                            <li>✅ Dengarkan Musik</li>
+                            <li>✅ **6 Perangkat**</li>
+                            <li>✅ Bebas Iklan</li>
+                            <li>✅ Kualitas HD</li>
+                            <li>🎁 Fitur Berbagi Keluarga</li>
+                        {% endif %}
+                    </ul>
+                    
+                    <a href="{% url 'finance:checkout' plan.id %}" class="w-100 btn btn-lg mt-auto ...
+                        {% if plan.name == 'PRE' %}btn-success{% else %}btn-outline-primary{% endif %}">
+                        Pilih Paket
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    
+</div>
+{% endblock content %}

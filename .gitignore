@@ -1,17 +1,24 @@
-# Mengabaikan Database Lokal
+# --- Database ---
 db.sqlite3
 
-# Mengabaikan File Environment & Rahasia
+# --- Environment & Rahasia (PENTING) ---
 .env
 env/
 venv/
 .venv/
 
-# Mengabaikan File Cache Python (Sampah)
+# --- Python Cache (Sampah Python) ---
 __pycache__/
 *.pyc
 *.pyo
 
-# Mengabaikan Media User (Foto Profil)
-# Kita tidak ingin upload foto hasil tes kita ke github teman
+# --- Log files (Dari Branch Main) ---
+*.log
+
+# --- Operating System files (Dari Branch Main) ---
+.DS_Store
+Thumbs.db
+
+# --- Media User (Dari Fitur Kamu) ---
+# Folder ini berisi foto profil user, jangan di-upload ke GitHub
 media/

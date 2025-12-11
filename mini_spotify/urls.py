@@ -13,7 +13,7 @@ urlpatterns = [
     
     path('system/', include('system_admin_app.urls')),
     path('artist/', include('artist_app.urls')),
-    path('finance/', include('finance_app.urls')),
+    path('finance/', include('finance.urls')),
 ]
 
 # Tambahkan ini agar gambar profil bisa muncul saat mode debug

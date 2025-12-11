@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="alert alert-success text-center shadow-lg p-5" role="alert" style="max-width: 700px; margin: 50px auto;">
+        <h2 class="display-4 text-success mb-3">🎉 Pembayaran Berhasil!</h2>
+        
+        <p class="lead">Terima kasih, **{{ user.username }}**!</p>
+
+        <p class="mb-4">
+            Langganan Anda telah berhasil diaktifkan. Anda kini dapat menikmati semua fitur Premium.
+        </p>
+        
+        <div class="p-3 mb-4 bg-light rounded">
+            **Status Langganan Anda:** <span class="fw-bold text-success">AKTIF</span>
+        </div>
+
+        <h3 class="mt-4 mb-3">Apa selanjutnya?</h3>
+        
+        <div class="d-grid gap-2 d-md-flex justify-content-center">
+            
+            <a href="/" class="btn btn-custom-primary btn-lg">
+                Mulai Mendengarkan Musik
+            </a>
+            
+           <a href="{% url 'finance:subscription_detail' %}" class="btn btn-outline-secondary btn-lg">
+                Lihat Detail Langganan
+            </a>
+        </div>
+    </div>
+{% endblock content %}
