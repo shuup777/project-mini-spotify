@@ -1,17 +1,24 @@
-# Database lokal
+# --- Database ---
 db.sqlite3
 
-# Virtual Environment
-venv/
+# --- Environment & Rahasia (PENTING) ---
+.env
 env/
+venv/
+.venv/
 
-# Python compiled files
-*.pyc
+# --- Python Cache (Sampah Python) ---
 __pycache__/
+*.pyc
+*.pyo
 
-# Log files
+# --- Log files (Dari Branch Main) ---
 *.log
 
-# Operating System files (macOS/Windows)
+# --- Operating System files (Dari Branch Main) ---
 .DS_Store
 Thumbs.db
+
+# --- Media User (Dari Fitur Kamu) ---
+# Folder ini berisi foto profil user, jangan di-upload ke GitHub
+media/

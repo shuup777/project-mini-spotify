@@ -1,106 +1,104 @@
-# user_app/services.py
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.contrib.auth.hashers import make_password # Gunakan ini untuk hashing
-from .models import UserProfile, FreeSubscription, ListeningHistory, UserPreferences, Notification, PlayEvent
-from datetime import datetime
-import time
+# Hash password otomatis ditangani oleh create_user, jadi make_password tidak wajib di-import manual di sini
+from .models import UserProfile, FreeSubscription, ListeningHistory, UserPreferences, Notification, PremiumSubscription
+from django.utils import timezone
+from datetime import timedelta
 
 class UserAuthenticator:
     def register(self, request, username, password, display_name):
         if User.objects.filter(username=username).exists():
-            print(f"Error: Username '{username}' sudah ada.")
             return None, "Username sudah digunakan."
 
         print(f"\nMendaftarkan user baru: {username}...")
 
-        # Buat user Django (password otomatis di-hash oleh create_user)
+        # 1. Buat user Django
         user = User.objects.create_user(username=username, password=password)
 
-        # Buat profil dan data terkait menggunakan model Django
-        profile = UserProfile.objects.create(user=user, display_name=display_name)
-        subscription = FreeSubscription.objects.create(user=user)
-        history = ListeningHistory.objects.create(user=user)
-        preferences = UserPreferences.objects.create(user=user)
+        # 2. Buat profil dan data terkait (Sesuai models.py Tahap 2)
+        UserProfile.objects.create(user=user, display_name=display_name)
+        FreeSubscription.objects.create(user=user)
+        ListeningHistory.objects.create(user=user)
+        UserPreferences.objects.create(user=user)
 
         print(f"Registrasi berhasil untuk {display_name}!")
-        return user, None # Kembalikan user dan pesan error jika ada
+        return user, None
 
     def login(self, request, username, password):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            print(f"\nLogin berhasil! Selamat datang, {user.profile.display_name}.")
-            return user
+            # Menggunakan try-except untuk menghindari error jika profil belum ada
+            try:
+                print(f"\nLogin berhasil! Selamat datang, {user.profile.display_name}.")
+            except:
+                print("\nLogin berhasil (User tanpa profil).")
+            return user, "Login Berhasil"
         else:
             print("\nError: Username atau password salah.")
-            return None
+            return None, "Username atau password salah"
 
     def logout(self, request):
         logout(request)
-        print("Logout berhasil. Sesi telah diakhiri.")
+        print("Logout berhasil.")
 
 # --- SERVIS UNTUK LOGIKA USER ---
 
 class UserService:
     def play_song(self, user, song_object):
-        # Asumsi song_object adalah instance dari model Song dari app lain
-        print(f"\n{user.profile.display_name} memutar lagu: {song_object.title}")
+        # PERBAIKAN: Menggunakan 'user.history' sesuai related_name di models.py
+        try:
+            print(f"\n{user.profile.display_name} memutar lagu: {song_object.title}")
+            user.history.add_event(song_object.title) # Kita simpan judul lagunya
 
-        # Tambahkan ke history Django
-        user.listening_history.add_event(song_object)
-
-        # Cek iklan berdasarkan subscription Django
-        if not user.subscription.can_skip_ads():
-            print("--- Memutar Iklan (Pengguna Gratis) ---")
-            time.sleep(1) # Simulasi waktu iklan
-
-        print(f"🎵 Sedang Memutar: {song_object.title}...")
-        time.sleep(2) # Simulasi durasi lagu
+            # Cek iklan
+            if not user.subscription.can_skip_ads():
+                print("--- [Iklan] Beli Premium untuk skip iklan ---")
+        except Exception as e:
+            print(f"Error playing song: {e}")
 
     def like_song(self, user, song_object):
-        # Logika untuk menyukai lagu, misalnya menambahkan ke ManyToManyField
-        # Di sini kita hanya print, karena implementasi ManyToManyField mungkin belum dibuat
         print(f"[User] {user.profile.display_name} menyukai {song_object.title}")
 
     def follow_user(self, user, user_to_follow):
-        # Asumsi 'following' adalah ManyToManyField di model User
-        # Di sini kita hanya print
         print(f"[User] {user.profile.display_name} sekarang mengikuti {user_to_follow.profile.display_name}")
 
     def create_playlist(self, user, name):
-        # Asumsi model Playlist ada di app lain (misalnya 'playlists')
+        # Kode ini aman, jika app playlists belum ada dia akan return None
         try:
             from playlists.models import Playlist
             new_playlist = Playlist.objects.create(name=name, owner=user)
-            print(f"[User] Playlist baru dibuat: {new_playlist.name}")
             return new_playlist
         except ImportError:
-            print("Model Playlist tidak ditemukan. Pastikan aplikasi 'playlists' sudah diinstal.")
+            print("Fitur Playlist belum tersedia (App 'playlists' tidak ditemukan).")
             return None
         except Exception as e:
             print(f"Gagal membuat playlist: {e}")
             return None
 
     def upgrade_subscription(self, user):
-        from .models import PremiumSubscription
-        if isinstance(user.subscription, FreeSubscription):
-            # Hapus subscription lama
-            user.subscription.delete()
-            # Buat yang baru
-            premium_sub = PremiumSubscription.objects.create(user=user)
+        # Cek apakah user saat ini pakai FreeSubscription
+        # Kita cek atribut 'freesubscription' (nama model huruf kecil)
+        if hasattr(user.subscription, 'freesubscription'):
+            old_sub = user.subscription
+            old_sub.delete()
+            
+            # PERBAIKAN: Set tanggal tagihan 30 hari ke depan
+            PremiumSubscription.objects.create(
+                user=user,
+                next_billing_date=timezone.now() + timedelta(days=30)
+            )
             print("[User] Langganan telah di-upgrade ke Premium!")
+            return True, "Upgrade Berhasil"
         else:
-            print("[User] Anda sudah menjadi pengguna Premium.")
+            print("[User] Anda sudah Premium atau status tidak diketahui.")
+            return False, "Sudah Premium"
 
     def get_unread_notifications(self, user):
-        # Ambil dari model Django
         return user.notifications.filter(is_read=False)
 
     def update_profile(self, user, new_name=None, new_bio=None):
-        # Panggil method update_profile dari model Django
-        user.profile.update_profile(new_name=new_name, new_bio=new_bio)
+        user.profile.update_profile(name=new_name, bio=new_bio)
 
     def update_preferences(self, user, new_theme=None, new_quality=None):
-        # Panggil method update_settings dari model Django
-        user.preferences.update_settings(theme=new_theme, audio_quality=new_quality)
+        user.preferences.update_settings(theme=new_theme, quality=new_quality)
