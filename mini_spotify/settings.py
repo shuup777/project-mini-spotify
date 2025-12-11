@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'system_admin_app',
     'user_app',
     'artist_app',
-    'finance_app',
+    'finance',
 ]
 
 MIDDLEWARE = [
